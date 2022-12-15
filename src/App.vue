@@ -15,5 +15,6 @@
   h1 {
     color: white;
     text-align: center;
+    padding: 10px;
   }
 </style>

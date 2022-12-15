@@ -1,6 +1,7 @@
 <template>
   <section>
-    <div class="card" v-for="country,index in countries">
+    <div v-if="!isDataAvailable" class="error"><p class="error-message">{{error}}</p></div>
+    <div v-else class="card" v-for="country,index in countries">
       <img class="card-img" :src="country.flags.png" :alt="country.name.common">
       <p class="country-name">{{country.name.common}}</p>
       <p>Population: {{country.population}}</p>
@@ -19,7 +20,8 @@
     data() {
     return {
       countries: [],
-      error: ''
+      error: '',
+      isDataAvailable: null
     }
   },
   computed: {
@@ -29,9 +31,22 @@
     async fetchCountries() {
       try {
         const response = await axios.get('https://restcountries.com/v3.1/region/africa')
-        this.countries = response.data
+        const data = response.data
+        // console.log(data)
+        if(data.length > 0) {
+          this.isDataAvailable = true
+        }
+        for(let i = 0; i < data.length; i++) {
+          if(i < 5) {
+            this.countries.push(data[i])
+            
+          }
+          
+        }
+        console.log(this.countries)
       }catch(err) {
-        this.error = err.message
+        this.error = 'Cannot get country details as of now'
+        this.isDataAvailable = false
       }
     },
     currency(currency) {
@@ -52,8 +67,17 @@
 <style scoped>
   section {
     display: flex;
-    flex-flow: wrap;
+    flex-flow: row wrap;
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .error {
+    display: flex;
+    height: 100vh;
+    width: 100%;
     justify-content: center;
+    border: 1px solid black;
   }
   .card {
     display: inline-block;
@@ -77,5 +101,7 @@
   .country-name {
     text-align: center;
     font-size: 20px;
+    font-weight: bold;
+    margin: 5px;
   }
 </style>
