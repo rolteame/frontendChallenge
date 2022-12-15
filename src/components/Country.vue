@@ -82,7 +82,7 @@
   .card {
     display: inline-block;
     height: auto;
-    width: 25%;
+    width: 350px;
     margin: 20px;
     border: 1px solid #000;
     background-color: #fff;
